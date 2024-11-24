@@ -1,4 +1,4 @@
-# TSINR: Capturing Temporal Continuity via Implicit Neural Representations for Time Series Anomaly Detection
+# ImputeINR: Adaptive Group-based Implicit Neural Representations for Time Series Imputation
 
 <p align="center">
 <img src=plot/INR_for_TS.png width="500" height="300"/>
