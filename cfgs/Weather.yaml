@@ -1,0 +1,69 @@
+trainer: timeseries_trainer
+
+eval_epoch: 1
+adaptive_clustering: True
+
+all_train_dataset:
+  name: all_timeseries
+  args:
+    split: train
+    args:
+      task_name: imputation
+      root_path: ./all_datasets/weather
+      data_path: weather.csv
+      mask_rate: 0.5
+      features: M
+      seq_len: 96
+      label_len: 0
+      pred_len: 0
+      target: OT
+      data: custom
+      embed: timeF
+      percent: 100
+      freq: h
+      num_workers: 2
+      batch_size: 128
+      seasonal_patterns: Monthly
+
+all_test_dataset:
+  name: all_timeseries
+  args:
+    split: test
+    args:
+      task_name: imputation
+      root_path: ./all_datasets/weather
+      data_path: weather.csv
+      mask_rate: 0.5
+      features: M
+      seq_len: 96
+      label_len: 0
+      pred_len: 0
+      target: OT
+      data: custom
+      embed: timeF
+      percent: 100
+      freq: h
+      num_workers: 2
+      batch_size: 128
+      seasonal_patterns: Monthly
+
+
+model:
+  name: ImputeINR
+  args:
+    tokenizer:
+      name: timeseries_tokenizer
+      args: {input_size: 96, patch_size: 1, padding: 0, img_channels: 21}
+    hyponet:
+      name: ImputeINR_hypo
+      args: {group: 1, global_depth: 1, group_depth: 1, in_dim: 1, out_dim: 21, global_hidden_dim: 16, group_hidden_dim: 16, use_pe: true, pe_dim: 16, out_bias: 0, pe_sigma: 1024, fourier_coef: 48} # lenght//2
+    n_groups: 64
+    transformer_encoder:
+      name: transformer_encoder
+      args: {dim: 64, depth: 3, n_head: 4, head_dim: 64, ff_dim: 256, multiscale: True}
+
+optimizer:
+  name: adam
+  args: {lr: 1.e-3}
+max_epoch: 100
+
