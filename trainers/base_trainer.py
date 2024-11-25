@@ -140,8 +140,12 @@ class BaseTrainer():
             tmp = datasets.make(cfg['all_train_dataset'])
             train_dataset = tmp.data_set
             self.train_loader = tmp.data_loader
-            self.new_order = train_dataset.new_order
-            self.group_num_list = train_dataset.group_num_list
+            if self.adaptive_clustering == True:
+                self.new_order = train_dataset.new_order
+                self.group_num_list = train_dataset.group_num_list
+            else:
+                self.new_order = None
+                self.group_num_list = None
             self.log(f'Train dataset: len={len(train_dataset)}')
 
         if cfg.get('all_test_dataset') is not None:
